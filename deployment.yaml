@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otr-catalog
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: otr-catalog
+  template:
+    metadata:
+      labels:
+        app: otr-catalog
+    spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: otr-catalog
+      containers:
+        - name: web
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /site.txt
+              port: 80
+            initialDelaySeconds: 2
+            periodSeconds: 2
+          volumeMounts:
+            - name: html
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: html
+          projected:
+            sources:
+              - configMap:
+                  name: otr-catalog-app
+              - configMap:
+                  name: otr-catalog-site
