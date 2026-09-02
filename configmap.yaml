@@ -158,7 +158,7 @@ data:
     
       <header>
         <div class="mark">OTR Wheel <span>Engineering</span></div>
-        <div class="release" id="release">Release v1.1</div>
+        <div class="release" id="release">Release v1.2</div>
       </header>
     
       <p class="lede">Live check of the order catalog service, once per second.</p>
